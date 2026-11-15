@@ -42,8 +42,8 @@ export default defineConfig({
     // Save video on failure
     video: 'retain-on-failure',
 
-    // Capture trace on first retry
-    trace: 'on-first-retry',
+    // Save trace on failure
+    trace: 'retain-on-failure',
 
   },
 

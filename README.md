@@ -136,6 +136,25 @@ The QA URL and login are placeholders and must be replaced with valid values.
 - Validation for missing environment URLs and logins
 - No credentials hardcoded in test files
 
+## Playwright Configuration Summary
+
+All settings are in playwright.config.js.
+
+| Setting | Value | Reason |
+|---------|-------|--------|
+| fullyParallel | true | Tests are independent, so they can run at the same time |
+| workers | 2 | Faster than one worker, but keeps the load small on the shared public demo server |
+| retries | 2 in CI, 0 locally | CI can retry short network or server problems; locally a failure is shown straight away |
+| forbidOnly | true in CI | Stops a test.only left in the code from skipping the other tests in CI |
+| timeout | 60 seconds | Login and search on the demo can be slow, and 30 seconds was not always enough |
+| expect timeout | 10 seconds | Each check waits up to 10 seconds for the page instead of using fixed waits |
+| screenshot | only-on-failure | Shows the page at the moment a test failed |
+| video | retain-on-failure | Shows the steps that led to a failure; videos of passing tests are deleted to save space |
+| trace | retain-on-failure | Keeps a full step-by-step record of every failed test, locally and in CI |
+| reporter | html | One report with results, errors and failure attachments |
+| projects | Chromium, Firefox, WebKit | Checks the application in three browser engines |
+| baseURL | from TEST_ENV | The same tests run on demo, qa or uat |
+
 ## Parallel Execution
 
 Playwright supports parallel test execution.
@@ -194,6 +213,17 @@ CI execution allows up to two retries for failed tests.
 
 This helps identify intermittent failures during automated execution.
 
+## Timeouts
+
+```javascript
+timeout: 60000,
+expect: { timeout: 10000 },
+```
+
+The demo application is a shared public server and is sometimes slow. With the default 30 second test timeout and 5 second check timeout, some runs failed while the employee list or the name suggestions were still loading.
+
+Each test can now take up to 60 seconds, and each check waits up to 10 seconds. These are only the maximum times: a check continues as soon as the page is ready, so passing tests are not slower. No fixed waits such as waitForTimeout are used.
+
 ## Screenshots, Videos and Traces
 
 Playwright is configured to capture diagnostic evidence.
@@ -217,14 +247,18 @@ Retains video recordings for failed tests.
 ### Trace Configuration
 
 ```javascript
-trace: 'on-first-retry',
+trace: 'retain-on-failure',
 ```
 
-Records a trace during the first retry.
+Keeps a trace for every failed test. A trace records each step, the page at each step, network requests and console messages.
 
-These features help investigate failed test cases and unexpected application behavior.
+Open a trace from the failed test in the HTML report, or with:
 
-The settings are configured, but failure artifacts have not been separately verified.
+```bash
+npx playwright show-trace test-results/<test-folder>/trace.zip
+```
+
+When a test fails, its screenshot, video and trace are saved in the test-results folder and attached to the test in the HTML report.
 
 ## HTML Reporting
 
