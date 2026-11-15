@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../pages/loginPage');
+const { PIMPage } = require('../pages/PIMPage');
 const { username, password } = require('../config/environments');
 
 test('TC_001 - Verify valid login', async ({ page }) => {
@@ -56,7 +57,8 @@ test('TC_003 - Verify employee management navigation', async ({ page }) => {
   await expect(page).toHaveURL(/dashboard/);
 
   // Navigate to PIM module
-  await page.getByRole('link', { name: 'PIM' }).click();
+  const pimPage = new PIMPage(page);
+  await pimPage.open();
 
   // Verify Employee List page opens
   await expect(page).toHaveURL(/viewEmployeeList/);
@@ -64,7 +66,7 @@ test('TC_003 - Verify employee management navigation', async ({ page }) => {
   // Verify page content
   await expect(page.getByRole('heading', { name: 'PIM' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Employee Information' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Search' })).toBeVisible();
+  await expect(pimPage.searchButton).toBeVisible();
 
 });
 
@@ -80,7 +82,8 @@ test('TC_004 - Verify employee data', async ({ page }) => {
     response.url().includes('/api/v2/pim/employees') && response.url().includes('model=detailed')
   );
 
-  await page.getByRole('link', { name: 'PIM' }).click();
+  const pimPage = new PIMPage(page);
+  await pimPage.open();
 
   const response = await responsePromise;
   expect(response.status()).toBe(200);
@@ -89,11 +92,11 @@ test('TC_004 - Verify employee data', async ({ page }) => {
   const employee = body.data[0];
 
   await expect(page.getByRole('heading', { name: 'Employee Information' })).toBeVisible();
-  await expect(page.getByRole('table')).toBeVisible();
+  await expect(pimPage.table).toBeVisible();
   await expect(page.getByText('First (& Middle) Name')).toBeVisible();
 
   // First employee row
-  const firstRow = page.getByRole('table').getByRole('row').nth(1);
+  const firstRow = pimPage.table.getByRole('row').nth(1);
   const cells = firstRow.getByRole('cell');
 
   // Compare table with API data
