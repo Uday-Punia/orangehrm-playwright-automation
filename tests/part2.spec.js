@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../pages/loginPage');
+const { username, password } = require('../config/environments');
 
 test.beforeEach(async ({ page }) => {
 
@@ -7,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.openLoginPage();
-  await loginPage.login('Admin', 'admin123');
+  await loginPage.login(username, password);
 
   // Navigate to PIM
   await page.getByRole('link', { name: 'PIM' }).click();

@@ -1,19 +1,35 @@
 const environments = {
-  demo: 'https://opensource-demo.orangehrmlive.com',
-  qa: process.env.QA_URL,
-  uat: process.env.UAT_URL
+
+  demo: {
+    url: 'https://opensource-demo.orangehrmlive.com',
+    username: 'Admin',
+    password: 'admin123'
+  },
+
+  qa: {
+    url: process.env.QA_URL,
+    username: process.env.QA_USERNAME,
+    password: process.env.QA_PASSWORD
+  },
+
+  uat: {
+    url: process.env.UAT_URL,
+    username: process.env.UAT_USERNAME,
+    password: process.env.UAT_PASSWORD
+  }
+
 };
 
+// Default environment is demo
 const environment = process.env.TEST_ENV || 'demo';
+const config = environments[environment];
 
-if (!Object.hasOwn(environments, environment)) {
-  throw new Error(`Unknown environment: ${environment}`);
+if (!config || !config.url || !config.username || !config.password) {
+  throw new Error('Environment not configured: ' + environment);
 }
 
-const baseURL = environments[environment];
-
-if (!baseURL) {
-  throw new Error(`URL not configured for: ${environment}`);
-}
-
-module.exports = { baseURL };
+module.exports = {
+  baseURL: config.url,
+  username: config.username,
+  password: config.password
+};

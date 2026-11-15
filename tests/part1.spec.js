@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../pages/loginPage');
+const { username, password } = require('../config/environments');
 
 test('TC_001 - Verify valid login', async ({ page }) => {
 
@@ -10,7 +11,7 @@ test('TC_001 - Verify valid login', async ({ page }) => {
   await loginPage.openLoginPage();
 
   // Enter valid credentials
-  await loginPage.login('Admin', 'admin123');
+  await loginPage.login(username, password);
 
   // Verify successful login
   await expect(page).toHaveURL(/dashboard/);
@@ -49,7 +50,7 @@ test('TC_003 - Verify employee management navigation', async ({ page }) => {
   await loginPage.openLoginPage();
 
   // Login with valid credentials
-  await loginPage.login('Admin', 'admin123');
+  await loginPage.login(username, password);
 
   // Verify dashboard opens
   await expect(page).toHaveURL(/dashboard/);
@@ -72,7 +73,7 @@ test('TC_004 - Verify employee data', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.openLoginPage();
-  await loginPage.login('Admin', 'admin123');
+  await loginPage.login(username, password);
 
   // Wait for employee list API
   const responsePromise = page.waitForResponse((response) =>
@@ -113,7 +114,7 @@ test('TC_005 - Verify logout functionality', async ({ page }) => {
   await loginPage.openLoginPage();
 
   // Login with valid credentials
-  await loginPage.login('Admin', 'admin123');
+  await loginPage.login(username, password);
 
   // Verify dashboard
   await expect(page).toHaveURL(/dashboard/);

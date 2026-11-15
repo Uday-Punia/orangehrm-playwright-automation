@@ -105,9 +105,11 @@ config/environments.js
 
 Supported environments:
 
-- demo - OrangeHRM Demo Environment
-- qa - Configurable using QA_URL
-- uat - Configurable using UAT_URL
+- demo - OrangeHRM Demo Environment (uses the public demo login)
+- qa - Configurable using QA_URL, QA_USERNAME and QA_PASSWORD
+- uat - Configurable using UAT_URL, UAT_USERNAME and UAT_PASSWORD
+
+Each environment has its own URL and login in config/environments.js, so the tests do not contain any credentials.
 
 The default environment is demo.
 
@@ -120,10 +122,10 @@ TEST_ENV=demo npx playwright test
 ### Run QA Environment
 
 ```bash
-TEST_ENV=qa QA_URL=https://your-qa-url.example npx playwright test
+TEST_ENV=qa QA_URL=https://your-qa-url.example QA_USERNAME=your-user QA_PASSWORD=your-password npx playwright test
 ```
 
-The QA URL is a placeholder and must be replaced with a valid application URL.
+The QA URL and login are placeholders and must be replaced with valid values.
 
 ### Environment Configuration Benefits
 
@@ -131,7 +133,8 @@ The QA URL is a placeholder and must be replaced with a valid application URL.
 - No hardcoded application URLs in page objects
 - Easy switching between environments
 - Reusable test cases
-- Validation for missing environment URLs
+- Validation for missing environment URLs and logins
+- No credentials hardcoded in test files
 
 ## Parallel Execution
 
