@@ -61,6 +61,39 @@ $env:TEST_ENV="demo"; npx playwright test part1.spec.js
 
 Result: 15 tests passed (5 test cases × Chromium, Firefox and WebKit).
 
+## Part 2 - Edge Case Identification and Automation
+
+Selected Workflow: Employee Search in PIM Module.
+
+EC_001 and EC_002 are basic negative checks. EC_003 to EC_006 are non-obvious cases that were found by exploring how the Employee Name and Employee Id fields behave.
+
+| Test ID | Scenario | Expected Behavior | Actual Behavior | Status |
+|---------|----------|-------------------|-----------------|--------|
+| EC_001 | Search for an employee name that does not exist (XYZ98765) | "No Records Found" is shown without errors | "No Records Found" is shown | Automated |
+| EC_002 | Enter special characters (@#$%) in Employee Name and search | Input is handled safely and "No Records Found" is shown | "No Records Found" is shown and the page keeps working | Automated |
+| EC_003 | Enter an existing first name with spaces before and after, do not select a suggestion, and search | Spaces are ignored and the employee is found | The suggestion list ignores the spaces and shows the employee, but Search keeps the spaces and shows "No Records Found" | Automated (bug found) |
+| EC_004 | Enter an Employee Id with 11 digits (12345678901) and search | A validation message, or no results | An "Invalid Parameter" error is shown and the table is emptied, but the record count still shows the old number of records | Automated (bug found) |
+| EC_005 | Enter only part of a first name, do not select a suggestion, and search | User must select a suggestion, or a partial search is done | A partial search is done and matching employees are shown | Documented - Not Automated |
+| EC_006 | Enter an existing Employee Id without its last digit and search | Partial match, the same as for names | Employee Id search only matches the full Id, so "No Records Found" is shown | Documented - Not Automated |
+
+EC_003 and EC_004 show real defects: in EC_003 the same input is handled differently by the suggestion list and by Search, and in EC_004 the table and the record count show different information.
+
+EC_005 and EC_006 show that name search and Employee Id search follow different matching rules, which is not explained anywhere on the page.
+
+The automated tests use the first employee in the table instead of a fixed name, because the demo data is shared and changes often.
+
+### Execution Command
+
+```bash
+TEST_ENV=demo npx playwright test part2.spec.js
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:TEST_ENV="demo"; npx playwright test part2.spec.js
+```
+
 ## Environment Configuration
 
 The framework supports environment-based execution using the TEST_ENV variable.
