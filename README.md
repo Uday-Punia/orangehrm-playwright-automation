@@ -347,31 +347,47 @@ npx playwright show-report
 
 ### Page Object Model
 
-Used to separate reusable page actions from test cases.
+LoginPage and PIMPage keep the locators and actions of each page. The tests only describe the steps and checks, so if the page changes, the fix is made in one place.
 
 ### Environment Configuration
 
-Used to manage application URLs centrally and support multiple environments.
+config/environments.js holds the URL and login for demo, qa and uat. TEST_ENV selects the environment, so the same tests run anywhere and no credentials are written in the test files.
 
-### Parallel Execution
+### Shared Setup with beforeEach
 
-Used to reduce overall test execution time.
+In part2.spec.js, login and opening PIM are done once in beforeEach instead of being repeated in every test.
 
-### Cross-Browser Testing
+### Locator Strategy
 
-Used to validate functionality across different browser engines.
+getByRole, getByText and getByPlaceholder are used where possible, because they follow what the user sees and are less likely to break than CSS or XPath.
 
-### CI Retries
+### Test Data
 
-Used to help investigate intermittent failures in CI environments.
+Tests read data from the page or the API instead of using fixed values, because the demo data changes often.
 
-### HTML Reporting
+### No Fixed Waits
 
-Used to provide clear test execution results and debugging information.
+Playwright's built-in waiting and expect checks are used instead of waitForTimeout, so tests continue as soon as the page is ready.
+
+### Parallel and Cross-Browser Execution
+
+Tests run in parallel with 2 workers in Chromium, Firefox and WebKit, which keeps runs fast without overloading the demo server.
 
 ### Failure Diagnostics
 
-Screenshots, videos, and traces are configured to support failure investigation.
+Screenshots, videos and traces are saved for failed tests and attached to the HTML report, which makes it easy to see why a test failed.
+
+## Known Limitations and Workarounds
+
+| Limitation | Workaround |
+|------------|------------|
+| The demo application is a shared public server and is sometimes slow | Test timeout is 60 seconds, check timeout is 10 seconds, only 2 workers are used, and CI retries failed tests up to 2 times |
+| The demo data is shared and changes often | Tests do not depend on fixed employee names. EC_003 reads the first employee from the table and TC_004 compares the table with the API response |
+| EC_003 and EC_004 check the current buggy behavior | If OrangeHRM fixes these bugs, the two tests will fail and must be updated to the new behavior |
+| When the employee list request fails, no error message is shown | Documented as a finding in NET_001; the test checks that the page keeps working |
+| Some fields have no accessible name, so a few CSS-based locators are used | These locators are kept only in PIMPage.js, so a change in the page needs to be fixed in one place |
+| Every test logs in through the login page | This is fine for 10 tests; for a larger suite, a saved login session (storageState) could be used to save time |
+| Only network failure is simulated with page.route() | A test with mocked employee data (route.fulfill) could be added later |
 
 ## Conclusion
 
