@@ -263,8 +263,6 @@ The HTML report provides:
 
 The above results were verified in the demo environment in Chromium, Firefox and WebKit.
 
-The demo server is sometimes slow. On a slow run, a WebKit test can go over the 30 second test timeout while the employee list is still loading; the same test passes when it is run again.
-
 ## Installation and Setup
 
 ### Prerequisites

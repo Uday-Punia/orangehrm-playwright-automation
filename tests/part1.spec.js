@@ -34,10 +34,8 @@ test('TC_002 - Verify invalid login', async ({ page }) => {
   // Verify user remains on login page
   await expect(page).toHaveURL(/auth\/login/);
 
-  // Try to open the dashboard directly without logging in
+  // Open dashboard without login
   await page.goto('/web/index.php/dashboard/index');
-
-  // Verify user is sent back to login page
   await expect(page).toHaveURL(/auth\/login/);
 
 });
@@ -62,7 +60,7 @@ test('TC_003 - Verify employee management navigation', async ({ page }) => {
   // Verify Employee List page opens
   await expect(page).toHaveURL(/viewEmployeeList/);
 
-  // Verify page content is rendered
+  // Verify page content
   await expect(page.getByRole('heading', { name: 'PIM' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Employee Information' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Search' })).toBeVisible();
@@ -76,7 +74,7 @@ test('TC_004 - Verify employee data', async ({ page }) => {
   await loginPage.openLoginPage();
   await loginPage.login('Admin', 'admin123');
 
-  // Wait for the API call that loads the employee table
+  // Wait for employee list API
   const responsePromise = page.waitForResponse((response) =>
     response.url().includes('/api/v2/pim/employees') && response.url().includes('model=detailed')
   );
@@ -86,7 +84,6 @@ test('TC_004 - Verify employee data', async ({ page }) => {
   const response = await responsePromise;
   expect(response.status()).toBe(200);
 
-  // Employee data sent by the server
   const body = await response.json();
   const employee = body.data[0];
 
@@ -94,16 +91,16 @@ test('TC_004 - Verify employee data', async ({ page }) => {
   await expect(page.getByRole('table')).toBeVisible();
   await expect(page.getByText('First (& Middle) Name')).toBeVisible();
 
-  // First row of the table (row 0 is the header row)
+  // First employee row
   const firstRow = page.getByRole('table').getByRole('row').nth(1);
   const cells = firstRow.getByRole('cell');
 
-  // Verify the table shows the same employee as the server sent
+  // Compare table with API data
   await expect(cells.nth(1)).toHaveText(employee.employeeId);
   await expect(cells.nth(2)).toContainText(employee.firstName);
   await expect(cells.nth(3)).toHaveText(employee.lastName);
 
-  // Verify record count matches the total from the server
+  // Verify record count
   await expect(page.getByText(`(${body.meta.total}) Records Found`)).toBeVisible();
 
 });
@@ -121,7 +118,7 @@ test('TC_005 - Verify logout functionality', async ({ page }) => {
   // Verify dashboard
   await expect(page).toHaveURL(/dashboard/);
 
-  // Click user profile dropdown
+  // Open profile menu
   await page.getByRole('banner').getByRole('img', { name: 'profile picture' }).click();
 
   // Click Logout
@@ -130,7 +127,7 @@ test('TC_005 - Verify logout functionality', async ({ page }) => {
   // Verify user returns to login page
   await expect(page).toHaveURL(/auth\/login/);
 
-  // Verify PIM page cannot be opened after logout
+  // Open PIM after logout
   await page.goto('/web/index.php/pim/viewEmployeeList');
   await expect(page).toHaveURL(/auth\/login/);
 

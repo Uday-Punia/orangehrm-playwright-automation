@@ -21,6 +21,12 @@ export default defineConfig({
   // Run 2 tests simultaneously
   workers: 2,
 
+  // 60 seconds per test (demo site is slow sometimes)
+  timeout: 60000,
+
+  // 10 seconds for each check
+  expect: { timeout: 10000 },
+
   // Generate HTML report
   reporter: 'html',
 
