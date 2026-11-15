@@ -1,15 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 import environmentConfig from './config/environments.js';
 
-// Get URL from environment configuration
 const { baseURL } = environmentConfig;
 
 export default defineConfig({
 
-  // Test folder
   testDir: './tests',
 
-  // Run tests in parallel
   fullyParallel: true,
 
   // Prevent test.only in CI
@@ -18,7 +15,6 @@ export default defineConfig({
   // Retry failed tests only in CI
   retries: process.env.CI ? 2 : 0,
 
-  // Run 2 tests simultaneously
   workers: 2,
 
   // 60 seconds per test (demo site is slow sometimes)
@@ -27,27 +23,20 @@ export default defineConfig({
   // 10 seconds for each check
   expect: { timeout: 10000 },
 
-  // Generate HTML report
   reporter: 'html',
 
-  // Common settings
   use: {
 
-    // Environment URL
     baseURL: baseURL,
 
-    // Screenshot on failure
     screenshot: 'only-on-failure',
 
-    // Save video on failure
     video: 'retain-on-failure',
 
-    // Save trace on failure
     trace: 'retain-on-failure',
 
   },
 
-  // Cross-browser testing
   projects: [
 
     {

@@ -7,13 +7,11 @@ let pimPage;
 
 test.beforeEach(async ({ page }) => {
 
-  // Login to OrangeHRM
   const loginPage = new LoginPage(page);
 
   await loginPage.openLoginPage();
   await loginPage.login(username, password);
 
-  // Navigate to PIM
   pimPage = new PIMPage(page);
   await pimPage.open();
 

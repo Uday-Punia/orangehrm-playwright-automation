@@ -20,7 +20,6 @@ const environments = {
 
 };
 
-// Default environment is demo
 const environment = process.env.TEST_ENV || 'demo';
 const config = environments[environment];
 
