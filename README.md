@@ -24,7 +24,8 @@ orangehrm-playwright-automation/
 ├── config/
 │   └── environments.js
 ├── pages/
-│   └── loginPage.js
+│   ├── loginPage.js
+│   └── PIMPage.js
 ├── tests/
 │   ├── part1.spec.js
 │   └── part2.spec.js
@@ -81,7 +82,17 @@ EC_003 and EC_004 show real defects: in EC_003 the same input is handled differe
 
 EC_005 and EC_006 show that name search and Employee Id search follow different matching rules, which is not explained anywhere on the page.
 
-The automated tests use the first employee in the table instead of a fixed name, because the demo data is shared and changes often.
+EC_003 uses the first employee in the table instead of a fixed name, because the demo data is shared and changes often.
+
+### Network Failure Test
+
+| Test ID | Scenario | Expected Behavior | Actual Behavior | Status |
+|---------|----------|-------------------|-----------------|--------|
+| NET_001 | Block the employee list request with page.route() and route.abort() | Page keeps working and shows an empty result or an error message | Page keeps working, shows "No Records Found" and Search can still be used, but no error message is shown | Automated |
+
+page.route() catches the request that loads the employee list, and route.abort() makes it fail in the same way as a lost network connection. The page is then reloaded so that it requests the list again.
+
+Finding: when the request fails, the user sees "No Records Found" with no error message, so they cannot tell a network problem from an empty result.
 
 ### Execution Command
 
@@ -295,8 +306,8 @@ The HTML report provides:
 | Test Suite | Total Tests | Result |
 |------------|-------------|--------|
 | Part 1 - Functional Testing | 5 | Passed |
-| Part 2 - Edge Case Testing | 4 | Passed |
-| Total | 9 | 9 Passed |
+| Part 2 - Edge Case and Network Testing | 5 | Passed |
+| Total | 10 | 10 Passed |
 
 The above results were verified in the demo environment in Chromium, Firefox and WebKit.
 
@@ -371,6 +382,7 @@ It includes:
 - Page Object Model
 - Functional Test Automation
 - Edge Case Automation
+- Network Failure Testing with page.route()
 - Environment Configuration
 - Parallel Execution
 - Cross-Browser Testing
@@ -378,4 +390,4 @@ It includes:
 - HTML Reporting
 - Screenshot, Video and Trace Configuration
 
-A total of 9 automated test cases (5 functional and 4 edge cases) have been verified successfully using the demo environment in Chromium, Firefox and WebKit.
+A total of 10 automated test cases (5 functional, 4 edge cases and 1 network failure test) have been verified successfully using the demo environment in Chromium, Firefox and WebKit.

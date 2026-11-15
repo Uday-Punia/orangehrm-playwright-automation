@@ -73,3 +73,16 @@ test('EC_004 - Search Employee Id longer than allowed', async ({ page }) => {
   await expect(page.locator('span.oxd-text--span').getByText(/\(\d+\) Records Found/)).toBeVisible();
 
 });
+
+test('NET_001 - Employee list request fails', async ({ page }) => {
+
+  // Block the employee list request
+  await page.route('**/api/v2/pim/employees*', (route) => route.abort());
+
+  await page.reload();
+
+  // Page still works
+  await expect(pimPage.noRecordsFound).toBeVisible();
+  await expect(pimPage.searchButton).toBeEnabled();
+
+});
