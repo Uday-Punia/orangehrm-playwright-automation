@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project automates functional testing of the OrangeHRM application using Playwright with JavaScript.
+This project automates functional and edge-case testing of the OrangeHRM application using Playwright with JavaScript.
 
 The framework follows the Page Object Model (POM) design pattern for better code reusability, readability, and maintenance.
 
@@ -26,7 +26,8 @@ orangehrm-playwright-automation/
 ├── pages/
 │   └── loginPage.js
 ├── tests/
-│   └── part1.spec.js
+│   ├── part1.spec.js
+│   └── part2.spec.js
 ├── playwright.config.js
 ├── package.json
 ├── package-lock.json
@@ -257,11 +258,12 @@ The HTML report provides:
 | Test Suite | Total Tests | Result |
 |------------|-------------|--------|
 | Part 1 - Functional Testing | 5 | Passed |
-| Total | 5 | 5 Passed |
+| Part 2 - Edge Case Testing | 4 | Passed |
+| Total | 9 | 9 Passed |
 
-The above results were verified in the demo environment.
+The above results were verified in the demo environment in Chromium, Firefox and WebKit.
 
-All tests were verified in Chromium, Firefox and WebKit (15 of 15 runs passed).
+The demo server is sometimes slow. On a slow run, a WebKit test can go over the 30 second test timeout while the employee list is still loading; the same test passes when it is run again.
 
 ## Installation and Setup
 
@@ -327,12 +329,13 @@ Screenshots, videos, and traces are configured to support failure investigation.
 
 ## Conclusion
 
-This project demonstrates functional automation using Playwright with JavaScript.
+This project demonstrates functional automation and edge-case testing using Playwright with JavaScript.
 
 It includes:
 
 - Page Object Model
 - Functional Test Automation
+- Edge Case Automation
 - Environment Configuration
 - Parallel Execution
 - Cross-Browser Testing
@@ -340,4 +343,4 @@ It includes:
 - HTML Reporting
 - Screenshot, Video and Trace Configuration
 
-A total of 5 automated test cases have been verified successfully using the demo environment in Chromium, Firefox and WebKit.
+A total of 9 automated test cases (5 functional and 4 edge cases) have been verified successfully using the demo environment in Chromium, Firefox and WebKit.
