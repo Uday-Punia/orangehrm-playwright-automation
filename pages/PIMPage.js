@@ -12,6 +12,8 @@ class PIMPage {
 
   async open() {
     await this.pimLink.click();
+    // Wait for the employee list to load before searching
+    await this.page.locator('span.oxd-text--span').getByText(/Records? Found/).waitFor();
   }
 
   async searchByName(name) {

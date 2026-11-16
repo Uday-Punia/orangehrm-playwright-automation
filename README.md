@@ -66,7 +66,7 @@ EC_001 and EC_002 are basic negative checks. EC_003 to EC_006 are non-obvious ca
 | Test ID | Scenario | Expected Behavior | Actual Behavior | Status |
 |---------|----------|-------------------|-----------------|--------|
 | EC_001 | Search for an employee name that does not exist (XYZ98765) | "No Records Found" is shown without errors | "No Records Found" is shown | Automated |
-| EC_002 | Enter special characters (@#$%) in Employee Name and search | Input is handled safely and "No Records Found" is shown | "No Records Found" is shown and the page keeps working | Automated |
+| EC_002 | Enter special characters (<>{}~^) in Employee Name and search | Input is handled safely and "No Records Found" is shown | "No Records Found" is shown and the page keeps working | Automated |
 | EC_003 | Enter an existing first name with spaces before and after, do not select a suggestion, and search | Spaces are ignored and the employee is found | The suggestion list ignores the spaces and shows the employee, but Search keeps the spaces and shows "No Records Found" | Automated (bug found) |
 | EC_004 | Enter an Employee Id with 11 digits (12345678901) and search | A validation message, or no results | An "Invalid Parameter" error is shown and the table is emptied, but the record count still shows the old number of records | Automated (bug found) |
 | EC_005 | Enter only part of a first name, do not select a suggestion, and search | User must select a suggestion, or a partial search is done | A partial search is done and matching employees are shown | Documented - Not Automated |

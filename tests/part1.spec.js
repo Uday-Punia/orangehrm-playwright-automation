@@ -84,7 +84,7 @@ test('TC_004 - Verify employee data', async ({ page }) => {
   const cells = firstRow.getByRole('cell');
 
   // Compare table with API data
-  await expect(cells.nth(1)).toHaveText(employee.employeeId);
+  await expect(cells.nth(1)).toHaveText(employee.employeeId || '');
   await expect(cells.nth(2)).toContainText(employee.firstName);
   await expect(cells.nth(3)).toHaveText(employee.lastName);
 

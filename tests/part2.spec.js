@@ -27,7 +27,7 @@ test('EC_001 - Search nonexistent employee', async () => {
 
 test('EC_002 - Search with special characters', async ({ page }) => {
 
-  await pimPage.searchByName('@#$%');
+  await pimPage.searchByName('<>{}~^');
 
   await expect(pimPage.noRecordsFound).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Employee Information' })).toBeVisible();
