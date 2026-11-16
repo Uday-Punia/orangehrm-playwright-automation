@@ -52,13 +52,7 @@ TC_004 compares the table with the data returned by the employee list API instea
 ### Execution Command
 
 ```bash
-TEST_ENV=demo npx playwright test part1.spec.js
-```
-
-On Windows PowerShell:
-
-```powershell
-$env:TEST_ENV="demo"; npx playwright test part1.spec.js
+npx playwright test tests/part1.spec.js
 ```
 
 Result: 15 tests passed (5 test cases × Chromium, Firefox and WebKit).
@@ -97,13 +91,7 @@ Finding: when the request fails, the user sees "No Records Found" with no error 
 ### Execution Command
 
 ```bash
-TEST_ENV=demo npx playwright test part2.spec.js
-```
-
-On Windows PowerShell:
-
-```powershell
-$env:TEST_ENV="demo"; npx playwright test part2.spec.js
+npx playwright test tests/part2.spec.js
 ```
 
 ## Environment Configuration
@@ -126,14 +114,24 @@ The default environment is demo.
 
 ### Run Demo Environment
 
+The demo environment is used by default, so no variable is needed:
+
 ```bash
-TEST_ENV=demo npx playwright test
+npx playwright test
 ```
 
 ### Run QA Environment
 
+macOS / Linux:
+
 ```bash
 TEST_ENV=qa QA_URL=https://your-qa-url.example QA_USERNAME=your-user QA_PASSWORD=your-password npx playwright test
+```
+
+Windows PowerShell:
+
+```powershell
+$env:TEST_ENV="qa"; $env:QA_URL="https://your-qa-url.example"; $env:QA_USERNAME="your-user"; $env:QA_PASSWORD="your-password"; npx playwright test
 ```
 
 The QA URL and login are placeholders and must be replaced with valid values.
@@ -184,19 +182,19 @@ The worker count can be adjusted based on available system resources.
 ### Run All Tests
 
 ```bash
-TEST_ENV=demo npx playwright test
+npx playwright test
 ```
 
 ### Run Chromium Tests
 
 ```bash
-TEST_ENV=demo npx playwright test --project=chromium
+npx playwright test --project=chromium
 ```
 
 ### Run Tests in Headed Mode
 
 ```bash
-TEST_ENV=demo npx playwright test --headed
+npx playwright test --headed
 ```
 
 ## Cross-Browser Testing
@@ -284,7 +282,7 @@ reporter: 'html',
 ### Generate Test Results
 
 ```bash
-TEST_ENV=demo npx playwright test
+npx playwright test
 ```
 
 ### Open HTML Report
@@ -334,7 +332,7 @@ npx playwright install
 ### Execute All Tests
 
 ```bash
-TEST_ENV=demo npx playwright test
+npx playwright test
 ```
 
 ### View HTML Report
